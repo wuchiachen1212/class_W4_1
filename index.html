@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <title>JS Bin</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+    <svg width="800" height="300"></svg>
+
+    <script>
+        var dataSet = [{
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "不動產開發業",
+            "platform": "無載具",
+            "number": 1530691,
+            "amount": 2081432419
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "批發業",
+            "platform": "無載具",
+            "number": 4142289,
+            "amount": 5565063958
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "資料處理及資訊供應服務業",
+            "platform": "無載具",
+            "number": 780708,
+            "amount": 1359622827
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "零售業",
+            "platform": "無載具",
+            "number": 64927420,
+            "amount": 19680973217
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "電信業",
+            "platform": "無載具",
+            "number": 225300,
+            "amount": 2302012551
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "餐飲業",
+            "platform": "無載具",
+            "number": 9855745,
+            "amount": 5193141219
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "影片服務、聲音錄製及音樂出版業",
+            "platform": "使用載具",
+            "number": 1518980,
+            "amount": 2606453896
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "資料處理及資訊供應服務業",
+            "platform": "使用載具",
+            "number": 3936592,
+            "amount": 2441866930
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "零售業",
+            "platform": "使用載具",
+            "number": 9675319,
+            "amount": 4693713798
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "電信業",
+            "platform": "使用載具",
+            "number": 15939352,
+            "amount": 15982550394
+        }, {
+            "date": "2016/8/1",
+            "city": "臺北市",
+            "cid": "A",
+            "industry": "電力及燃氣供應業",
+            "platform": "使用載具",
+            "number": 688044,
+            "amount": 6096595655
+        }];
+
+        bind(dataSet);
+        render();
+
+        function bind(dataSet) {
+            var selection = d3.select("svg")
+                .selectAll("rect")
+                .data(dataSet);
+            selection.enter().append("rect");
+            selection.exit().remove();
+
+            var selection_text = d3.select("svg")
+                .selectAll("text")
+                .data(dataSet);
+            selection_text.enter().append("text");
+            selection_text.exit().remove();
+        }
+
+        function render() {
+
+            var xScale = d3.scale.linear()
+                .domain([d3.min(dataSet, function(d) {
+                    return d.amount;
+                }), d3.max(dataSet, function(d) {
+                    return d.amount;
+
+                })])
+                .range([0, 300]);
+
+            var xAxis = d3.svg.axis()
+                .scale(xScale)
+                .orient("bottom").ticks(10).tickFormat(function(d) {
+                    return
+                    d / 1000000000 + "G"
+                });
+
+
+            d3.selectAll("rect")
+                .attr({
+                    x: 300,
+                    y: function(d, i) {
+                        return 10 + 20 * i;
+                    },
+                    width: function(d, i) {
+                        return xScale(d.amount);
+                    },
+                    height: 18,
+                    fill: "red"
+                });
+            d3.selectAll("text")
+                .attr({
+                    x: 10,
+                    y: function(d, i) {
+                        return 25 + 20 * i;
+                    }
+                }).text(function(d) {
+                    return d.industry;
+                });
+
+            d3.select("svg")
+                .append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(300,250)")
+                .call(xAxis);
+        }
+    </script>
+</body>
+</html>
